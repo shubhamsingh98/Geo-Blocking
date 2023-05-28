@@ -1,0 +1,72 @@
+  Linked Templates:
+About:
+These are templates which are used to deploy several resources at a same time.
+These store the URLs of the templates of which resources we have to deploy.
+Generally used to deploy complex solution.
+In this we can break our template into several pieces and deploy them together via Main Template.
+For linked or nested templates, you can only set the deployment mode to Incremental.
+However, the main template can be deployed in complete mode.
+If you deploy the main template in the complete mode, and the linked or nested template targets the same resource group, the resources deployed in the linked or nested template are included in the evaluation for complete mode deployment
+If the linked or nested template targets a different resource group, that deployment uses incremental mode.
+
+eg:
+
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {},
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "nestedTemplate1",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri":"https://mystorageaccount.blob.core.windows.net/AzureTemplates/newStorageAccount.json",
+          "contentVersion":"1.0.0.0"
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
+
+Store:
+Have to be stored other than locally. i.e. it should be publically available via URLs.
+-Stored in Stogare Account.
+-Stored in Github Repository.
+-Stored in DevOps Repository.
+
+Good Practice:
+-Use deployment() function to grab current template information
+contentVersion property is not required for linked template.
+-Use varialbe to create link templates URLs
+-Copy elements should be used:
+--On deployment resource for outer scope
+--Inside of nested template for inner scope
+-Use referene('deploymentName').outputs.propertyName.value expression to get values from linked templates
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------
+Best Practice of Arm Templates
+-Apply T-Shirt sizes
+-Test every template and automate it
+-Use output parameters
+
+
